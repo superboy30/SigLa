@@ -2,7 +2,7 @@
 import base64
 import io
 from PIL import Image
-from pyimagesearch.motion_detection.singlemotiondetector import SingleMotionDetector
+# from pyimagesearch.motion_detection.singlemotiondetector import SingleMotionDetector
 from imutils.video import VideoStream
 from flask import Response
 from flask import Flask, jsonify
