@@ -1,16 +1,23 @@
 from start import *
 
+DATA_PATH = os.path.join('Collect') 
 
-# Folder start
-start_folder = 30
-
-for action in actions: 
-    dirmax = np.max(np.array(os.listdir(os.path.join(DATA_PATH, action))).astype(int))
-    for sequence in range(1,no_sequences+1):
-        try: 
-            os.makedirs(os.path.join(DATA_PATH, action, str(dirmax+sequence)))
+for action in actions:
+    for sequence in range(no_sequences):
+        try:
+            os.makedirs(os.path.join(DATA_PATH, action, str(sequence)))
         except:
             pass
+        
+
+
+# for action in actions: 
+#     dirmax = np.max(np.array(os.listdir(os.path.join(DATA_PATH, action))).astype(int))
+#     for sequence in range(1,no_sequences+1):
+#         try: 
+#             os.makedirs(os.path.join(DATA_PATH, action, str(dirmax+sequence)))
+#         except:
+#             pass
 
 
 cap = cv2.VideoCapture(0)
@@ -42,7 +49,7 @@ with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
                     # Show to screen
                     cv2.imshow('OpenCV Feed', image)
-                    cv2.waitKey(500)
+                    cv2.waitKey(2000)
                 else: 
                     cv2.putText(image, 'Collecting frames for {} Video Number {}'.format(action, sequence), (15,12), 
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA)

@@ -1,6 +1,8 @@
 from start import *
 
 
+DATA_PATH = os.path.join('Collect') 
+
 label_map = {label:num for num, label in enumerate(actions)}
 
 sequences, labels = [], []
@@ -24,6 +26,13 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.05)
 
 log_dir = os.path.join('Logs')
 tb_callback = TensorBoard(log_dir=log_dir)
+# model_checkpoint = ModelCheckpoint(
+#     filepath='model.h5',
+#     save_weights_only=True,
+#     monitor='categorical_accuracy',
+#     mode='max',
+#     save_best_only=True
+# )
 
 model = Sequential()
 model.add(LSTM(64, return_sequences=True, activation='relu', input_shape=(30,1662)))
@@ -36,7 +45,5 @@ model.add(Dense(actions.shape[0], activation='softmax'))
 model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['categorical_accuracy'])
 
 model.fit(X_train, y_train, epochs=2000, callbacks=[tb_callback])
-
-model.summary()
 
 model.save('action.h5')

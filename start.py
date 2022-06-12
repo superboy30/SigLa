@@ -9,7 +9,7 @@ from sklearn.model_selection import train_test_split
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
-from tensorflow.keras.callbacks import TensorBoard
+from tensorflow.keras.callbacks import TensorBoard, ModelCheckpoint
 
 
 mp_holistic = mp.solutions.holistic # Holistic model
@@ -69,14 +69,12 @@ def prob_viz(res, actions, input_frame, colors):
         
     return output_frame
 
-# Path for exported data, numpy arrays
-DATA_PATH = os.path.join('MP_Data') 
 
 # Actions that we try to detect
-actions = np.array(['teleport','twojoints'])
+actions = np.array(['How are you'])
 
 # Thirty videos worth of data
-no_sequences = 30
+no_sequences = 50
 
 # Videos are going to be 30 frames in length
 sequence_length = 30
