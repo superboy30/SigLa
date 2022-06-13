@@ -15,7 +15,7 @@ model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['categ
 
 # 1. New detection variables
 
-model.load_weights('action.h5') 
+model.load_weights('action_600.h5') 
 
 # 1. New detection variables
 sequence = []
@@ -88,3 +88,5 @@ with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=
             break
     cap.release()
     cv2.destroyAllWindows()
+    
+    

@@ -71,7 +71,15 @@ def prob_viz(res, actions, input_frame, colors):
 actions = np.array(['Church','Fine','Hello','Home','I am','I hate you','I love you','Money','No','Stop','Why','Yes'])
 
 # Thirty videos worth of datass
+<<<<<<< HEAD
 no_sequences = 50
+=======
+<<<<<<< HEAD
+no_sequences = 50
+=======
+no_sequences = 80
+>>>>>>> 133129ded3c7cc27d7a71caead6a35ad6ddb0ce9
+>>>>>>> f1f00ea26fd49377013a76d7572b8445f92daf11
 
 # Videos are going to be 30 frames in lengths
 sequence_length = 30
