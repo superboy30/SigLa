@@ -20,12 +20,16 @@ X = np.array(sequences)
 X.shape
 y = to_categorical(labels).astype(int)
 
-
+class CustomSaver(Callback):
+    def on_epoch_end(self, epoch, logs={}):
+        if epoch != 0 and epoch % 100 == 0:  # or save after some epoch, each k-th epoch etc.
+            self.model.save("action_{}.h5".format(epoch))
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.05)
 
 log_dir = os.path.join('Logs')
 tb_callback = TensorBoard(log_dir=log_dir)
+saver = CustomSaver()
 # model_checkpoint = ModelCheckpoint(
 #     filepath='model.h5',
 #     save_weights_only=True,
@@ -44,6 +48,8 @@ model.add(Dense(actions.shape[0], activation='softmax'))
 
 model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['categorical_accuracy'])
 
-model.fit(X_train, y_train, epochs=2000, callbacks=[tb_callback])
+model.fit(X_train, y_train, epochs=500, callbacks=[tb_callback, saver])
+
+# 1k, 500, 300, 200
 
 model.save('action.h5')

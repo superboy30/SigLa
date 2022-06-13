@@ -9,7 +9,7 @@ from sklearn.model_selection import train_test_split
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
-from tensorflow.keras.callbacks import TensorBoard, ModelCheckpoint
+from tensorflow.keras.callbacks import TensorBoard, ModelCheckpoint, Callback
 
 
 mp_holistic = mp.solutions.holistic # Holistic model
@@ -51,8 +51,6 @@ def draw_styled_landmarks(image, results):
                             mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2)
                             )
 
-
-                            
 def extract_keypoints(results):
     # pose = np.array([[res.x, res.y, res.z, res.visibility] for res in results.pose_landmarks.landmark]).flatten() if results.pose_landmarks else np.zeros(33*4)
     # face = np.array([[res.x, res.y, res.z] for res in results.face_landmarks.landmark]).flatten() if results.face_landmarks else np.zeros(468*3)
@@ -70,7 +68,7 @@ def prob_viz(res, actions, input_frame, colors):
 
 
 # Actions that we try to detects
-actions = np.array(['Hello'])
+actions = np.array(['Church','Fine','Hello','Home','I am','I hate you','I love you','Money','No','Stop','Why','Yes'])
 
 # Thirty videos worth of datass
 no_sequences = 50
