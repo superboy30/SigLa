@@ -59,8 +59,7 @@ def extract_keypoints(results):
     lh = np.array([[res.x, res.y, res.z] for res in results.left_hand_landmarks.landmark]).flatten() if results.left_hand_landmarks else np.zeros(21*3)
     rh = np.array([[res.x, res.y, res.z] for res in results.right_hand_landmarks.landmark]).flatten() if results.right_hand_landmarks else np.zeros(21*3)
     return np.concatenate([ lh, rh])
-
-colors = [(245,117,16), (117,245,16), (16,117,245)]
+    colors = [(245,117,16), (117,245,16), (16,117,245)]
 def prob_viz(res, actions, input_frame, colors):
     output_frame = input_frame.copy()
     for num, prob in enumerate(res):
@@ -71,11 +70,14 @@ def prob_viz(res, actions, input_frame, colors):
 
 
 # Actions that we try to detects
-actions = np.array(['Calm Down','Fine','Hello','Im','No','Stop','Why','Yes'])
+actions = np.array(['Hello','Yes','No','Im'])
 
 # Thirty videos worth of datass
+<<<<<<< HEAD
 no_sequences = 50
+=======
+no_sequences = 80
+>>>>>>> 133129ded3c7cc27d7a71caead6a35ad6ddb0ce9
 
 # Videos are going to be 30 frames in lengths
 sequence_length = 30
-
