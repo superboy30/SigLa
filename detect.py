@@ -3,7 +3,7 @@ from start import *
 
 model = Sequential()
 
-model.add(LSTM(64, return_sequences=True, activation='relu', input_shape=(30,1662)))
+model.add(LSTM(64, return_sequences=True, activation='relu', input_shape=(30,126)))
 model.add(LSTM(128, return_sequences=True, activation='relu'))
 model.add(LSTM(64, return_sequences=False, activation='relu'))
 model.add(Dense(64, activation='relu'))
@@ -15,15 +15,15 @@ model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['categ
 
 # 1. New detection variables
 
-model.load_weights('abc-aerom.h5') 
+model.load_weights('action.h5') 
 
 # 1. New detection variables
 sequence = []
-sentence = []
+sentence = ''
 predictions = []
 threshold = 0.5
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 # Set mediapipe model 
 with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
     while cap.isOpened():
@@ -45,29 +45,40 @@ with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=
         
         if len(sequence) == 30:
             res = model.predict(np.expand_dims(sequence, axis=0))[0]
-            print(actions[np.argmax(res)])
+            # print(actions[np.argmax(res)])
             predictions.append(np.argmax(res))
             
             
         #3. Viz logic
             if np.unique(predictions[-10:])[0]==np.argmax(res): 
                 if res[np.argmax(res)] > threshold: 
+                    # If you want a subtitle type of text 
+                    sentence = actions[np.argmax(res)];
                     
-                    if len(sentence) > 0: 
-                        if actions[np.argmax(res)] != sentence[-1]:
-                            sentence.append(actions[np.argmax(res)])
-                    else:
-                        sentence.append(actions[np.argmax(res)])
+                    # if len(sentence) > 0: 
+                    #     if actions[np.argmax(res)] != sentence[-1]:
+                    #         sentence.append(actions[np.argmax(res)])
+                    # else:
+                    #     sentence.append(actions[np.argmax(res)])
 
-            if len(sentence) > 5: 
-                sentence = sentence[-5:]
+            # if len(sentence) > 5: 
+            #     sentence = sentence[-5:]
 
             # Viz probabilities
-            image = prob_viz(res, actions, image, colors)
+            # image = prob_viz(res, actions, image, colors)
             
-        cv2.rectangle(image, (0,0), (640, 40), (245, 117, 16), -1)
-        cv2.putText(image, ' '.join(sentence), (3,30), 
-                       cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+        
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        
+        textsize = cv2.getTextSize(sentence, font, 1, 2)[0]
+        
+        textX = (image.shape[1] - textsize[0]) * 0.5
+        textY = (image.shape[0] + textsize[1])
+        
+        if(np.all(keypoints==0) == False):
+            cv2.rectangle(image,  (0, int(textY)), (640, int(textY) - 80), (0, 0, 0), -1)
+            cv2.putText(image, sentence, (int(textX), int(textY) - 40 ), font, 1, (0, 0, 255), 2)
+        
         
         # Show to screen
         cv2.imshow('OpenCV Feed', image)
