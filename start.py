@@ -70,10 +70,10 @@ def prob_viz(res, actions, input_frame, colors):
 
 
 # Actions that we try to detects
-actions = np.array(['Hello','Yes','No','Im'])
+actions = np.array(['Hello'])
 
 # Thirty videos worth of datass
-no_sequences = 80
+no_sequences = 50
 
 # Videos are going to be 30 frames in lengths
 sequence_length = 30
