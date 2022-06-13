@@ -9,7 +9,7 @@ from sklearn.model_selection import train_test_split
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
-from tensorflow.keras.callbacks import TensorBoard, ModelCheckpoint
+from tensorflow.keras.callbacks import TensorBoard, ModelCheckpoint, Callback
 
 
 mp_holistic = mp.solutions.holistic # Holistic model
@@ -74,7 +74,7 @@ def prob_viz(res, actions, input_frame, colors):
 actions = np.array(['Calm Down','Fine','Hello','Im','No','Stop','Why','Yes'])
 
 # Thirty videos worth of datass
-no_sequences = 100
+no_sequences = 50
 
 # Videos are going to be 30 frames in lengths
 sequence_length = 30
