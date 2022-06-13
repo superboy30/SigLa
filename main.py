@@ -1,4 +1,3 @@
-
 import base64
 import io
 from PIL import Image
@@ -23,7 +22,7 @@ import os
 outputFrame = None
 lock = threading.Lock()
 
-app = Flask(__name__)
+app = Flask(name)
 socketio = SocketIO(app)
 
 
@@ -116,7 +115,7 @@ def video_feed():
     )
     
 
-if __name__ == '__main__':
+if name == 'main':
 
     ap = argparse.ArgumentParser()
     ap.add_argument("-i", "--ip", type=str, required=True,
@@ -134,4 +133,3 @@ if __name__ == '__main__':
 
     app.run(host=args["ip"], port=args["port"], debug=True,
         threaded=True, use_reloader=False, ssl_context='adhoc')
-    
