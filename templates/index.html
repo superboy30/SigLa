@@ -7,17 +7,16 @@
   <title>Document</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
 </head>
-<body>
+<body style="display:flex">
   
 
 
 <div id="container">
-  <canvas id="canvasOutput"></canvas>
-  <video autoplay="true" id="videoElement" style="display: none;" ></video>
+  <video autoplay="true" id="videoElement" style="height: 100%; width: 100%" ></video>
 </div>
 
-<div class = 'video'>
-  <img id="image">
+<div class='video'>
+  <img id="image" style="height: 95%; width: 95%">
 </div>
 
 <script>
@@ -29,8 +28,6 @@
 
   const video = document.querySelector("#videoElement");
 
-  video.width = 500; 
-  video.height = 375;
 
   if (navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices.getUserMedia({ video: true })

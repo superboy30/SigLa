@@ -22,7 +22,7 @@ y = to_categorical(labels).astype(int)
 
 class CustomSaver(Callback):
     def on_epoch_end(self, epoch, logs={}):
-        if epoch != 0 and epoch % 100 == 0:  # or save after some epoch, each k-th epoch etc.
+        if epoch != 0 and epoch % 100 == 0:  # Save epochs every hundred 
             self.model.save("action_{}.h5".format(epoch))
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.05)

@@ -22,11 +22,13 @@ import os
 outputFrame = None
 lock = threading.Lock()
 
-app = Flask(name)
+app = Flask(__name__)
 socketio = SocketIO(app)
 
-
 md = GestureDetector()
+
+
+model = md.load_model()
 
 @app.route("/")
 def index():
@@ -46,15 +48,47 @@ def image(data_image):
     # Process the image frame
     frame = imutils.resize(frame, width=700)
     frame = cv2.flip(frame, 1)
-
+    
+    
     with md.mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
-         # Make detections
+       
+
+        # Make detections
         image, results = md.mediapipe_detection(frame, holistic)
         
         # Draw landmarks
         md.draw_styled_landmarks(image, results)
-
-
+        
+        # 2. Prediction logic
+        keypoints = md.extract_keypoints(results)
+        md.sequence.append(keypoints)
+        md.sequence = md.sequence[-30:]
+        if len(md.sequence) == 30:
+            res = model.predict(np.expand_dims(md.sequence, axis=0))[0]
+            # print(actions[np.argmax(res)])
+            md.predictions.append(np.argmax(res))
+            
+            
+            #3. Viz logic
+            if np.unique(md.predictions[-10:])[0]==np.argmax(res): 
+                if res[np.argmax(res)] > md.threshold: 
+                    # If you want a subtitle type of text 
+                    md.sentence = md.actions[np.argmax(res)];
+                    
+                   
+        
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        
+        textsize = cv2.getTextSize(md.sentence, font, 1, 2)[0]
+        
+        textX = (image.shape[1] - textsize[0]) * 0.5
+        textY = (image.shape[0] + textsize[1])
+        
+        if(np.all(keypoints==0) == False):
+            cv2.rectangle(image,  (0, int(textY)), (700, int(textY) - 80), (0, 0, 0), -1)
+            cv2.putText(image, md.sentence, (int(textX), int(textY) - 40 ), font, 1, (255, 255, 255), 2)
+        
+        
         # base64 encode
         imgencode = cv2.imencode('.jpg', image)[1]
 
@@ -65,6 +99,7 @@ def image(data_image):
         # emit the frame back
         emit('response_back', stringData)
 
+        
 
 def detect_motion():
 
@@ -114,8 +149,8 @@ def video_feed():
         mimetype = "multipart/x-mixed-replace; boundary=frame",
     )
     
-
-if name == 'main':
+# python main.py --ip 0.0.0.0 --port 8080 <- to run this web
+if __name__ == '__main__':
 
     ap = argparse.ArgumentParser()
     ap.add_argument("-i", "--ip", type=str, required=True,

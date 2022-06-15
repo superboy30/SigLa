@@ -15,7 +15,7 @@ model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['categ
 
 # 1. New detection variables
 
-model.load_weights('action_600.h5') 
+model.load_weights('action_best.h5') 
 
 # 1. New detection variables
 sequence = []
@@ -43,6 +43,8 @@ with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=
         sequence.append(keypoints)
         sequence = sequence[-30:]
         
+        print(len(sequence))
+        
         if len(sequence) == 30:
             res = model.predict(np.expand_dims(sequence, axis=0))[0]
             # print(actions[np.argmax(res)])
@@ -55,17 +57,6 @@ with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=
                     # If you want a subtitle type of text 
                     sentence = actions[np.argmax(res)];
                     
-                    # if len(sentence) > 0: 
-                    #     if actions[np.argmax(res)] != sentence[-1]:
-                    #         sentence.append(actions[np.argmax(res)])
-                    # else:
-                    #     sentence.append(actions[np.argmax(res)])
-
-            # if len(sentence) > 5: 
-            #     sentence = sentence[-5:]
-
-            # Viz probabilities
-            # image = prob_viz(res, actions, image, colors)
             
         
         font = cv2.FONT_HERSHEY_SIMPLEX
@@ -86,6 +77,7 @@ with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=
         # Break gracefully
         if cv2.waitKey(10) & 0xFF == ord('q'):
             break
+        
     cap.release()
     cv2.destroyAllWindows()
     
